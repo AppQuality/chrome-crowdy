@@ -1,27 +1,30 @@
 {
-  "name": "AppQuality - Data Enhancer",
-  "version": "0.0.1",
-  "manifest_version": 2,
-  "description": "This extension use to collect additional data during functional crowd testing activities.",
-  "homepage_url": "http://extensionizr.com",
-  "icons": {
-    "16": "icons/icon16.png",
-    "48": "icons/icon48.png",
-    "128": "icons/icon128.png"
-  },
-  "default_locale": "en",
-  "background": {
-    "page": "src/bg/background.html",
-    "persistent": true
-  },
-  "options_page": "src/options_custom/index.html",
-  "page_action": {
-    "default_icon": "icons/icon19.png",
-    "default_title": "page action demo",
-    "default_popup": "src/page_action/page_action.html"
-  },
-  "permissions": [
-    "clipboardRead",
-    "clipboardWrite"
-  ]
+	"manifest_version": 2,
+	"name": "Click Recorder",
+	"version": "0.1",
+	"description": "The extension that spies your tabs and clicks!",
+	"browser_action": {
+		"default_icon": "icons/icon.png",
+		"default_title": "Recorder",
+        "default_popup": "popup/popup.html"
+	},
+
+	"permissions": [
+      	"storage",
+      	"tabs",
+      	"downloads"
+    ],
+
+	"content_scripts": [
+	{
+		"matches": [
+			"<all_urls>"
+		],
+		"js": ["lib/jquery-3.5.1.min.js","scripts/content.js"]
+	}],
+
+	"background": {
+		"scripts": ["scripts/background.js"],
+		"persistent": false
+	}
 }

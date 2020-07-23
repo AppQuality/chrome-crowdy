@@ -1,0 +1,10 @@
+
+body {
+	background-color:lime;
+	width:90px;
+	font-weight: bold;
+}
+
+#btn_record {
+	cursor:pointer;
+}
