@@ -1,0 +1,163 @@
+[
+	// In the following scheme, /type\ represents the type. 
+
+	// Time is in the form: "dd/MM/yyyy hh:mm:ss"
+
+	events: [
+
+		// Click
+		{
+			"type": "click",
+			"time": /string\,
+			"data": {
+				"url": /string\,
+				"id_obj": /string\,
+				"class_obj": /string\,
+				"position_x": /string\,
+				"position_y": /string\
+			}
+		},
+
+		// Console log
+		{
+			"type": "console",
+			"time": /string\,
+			"data": {
+				"type": "c_log" OR "c_warn" OR "c_error" OR "c_debug",
+				"msg":/string\
+			}
+		},
+
+		// Generical error (SyntaxError, UnknownType...)
+		{
+			"type": "error",
+			"time": /string\,
+			"data": {
+				"message": /string\,
+				"filename": /string\,
+				"lineno": /number\,
+				"colno": /number\,
+				"error": /object\
+			}
+		},
+
+		// GET error
+		{
+			"type": "errorget",
+			"time": /string\,
+			"data": {
+				"error": /string\,
+				"frameId": /number\,
+				"fromCache": /bool\,
+				"initiator": /string\,
+				"method": /string\,
+				"parentFrameId": /number\,
+				"requestId": /string\,
+				"tabId": /number\,
+				"timeStamp": /number\,
+				"type": /string\,
+				"url": /string\
+			}
+		},
+
+		// Cookie updated: https://developer.chrome.com/extensions/cookies
+		{
+			"data": {
+		        "cause": "evicted" OR "expired" OR "explicit" OR "expired_overwrite" OR "overwrite",
+		        "cookie": {
+					"domain": /string\,
+					"expirationDate": /number\,
+					"hostOnly": /bool\,
+					"httpOnly": /bool\,
+					"name": /string\,
+					"path": /string\,
+					"sameSite": /string\,
+					"secure": /bool\,
+					"session": /bool\,
+					"storeId": /string\,
+					"value": /string\
+		        },
+				"removed": /bool\
+			},
+			"time": /string\,
+			"type": "cookie"
+		},
+
+		// Storage updated
+		{
+			"data": {
+				"key": /string\,
+				"newValue": /string\,
+				"oldValue": /string\,
+				"url": /string\
+			},
+			"time": /string\,
+			"type": "storage"
+		}
+	],
+	
+	starting_localStorage: [
+		{
+			"data": {
+				// All variables here
+			},
+			"domain": /string\,
+			"time": /string\
+		}
+	],
+
+	starting_cookies: [
+		{
+			"data": [
+				{
+					"domain": /string\,
+					"expirationDate": /number\,
+					"hostOnly": /bool\,
+					"httpOnly": /bool\,
+					"name": /string\,
+					"path": /string\,
+					"sameSite": /string\,
+					"secure": /bool\,
+					"session": /bool\,
+					"storeId": /string\,
+					"value": /string\
+				}
+			],
+			"domain": /string\,
+			"time": /string\
+			}
+	],
+
+	extensions: [ 
+		{
+			"appLaunchUrl": /string\,
+			"availableLaunchTypes": [
+				"OPEN_AS_REGULAR_TAB",
+				"OPEN_AS_WINDOW"
+			],
+			"description": /string\,
+			"enabled": /bool\,
+			"homepageUrl": /string\,
+			"hostPermissions": [],
+			"icons": [
+				{
+					"size": /number\,
+					"url": /string\
+				}
+			],
+			"id": /string\,
+			"installType": /string\,
+			"isApp": /bool\,
+			"launchType": /string\,
+			"mayDisable": /bool\,
+			"name": /string\,
+			"offlineEnabled": /bool\,
+			"optionsUrl": /string\,
+			"permissions": [],
+			"shortName": /string\,
+			"type": /string\,
+			"updateUrl": /string\,
+			"version": /string\
+		}
+	]
+]

@@ -3,9 +3,60 @@
 <html>
 	<head>
 		<link rel="stylesheet" type="text/css" href="style.css">
+		<script src="../scripts/utility.js"></script>
+		<script src="../lib/FileSaver.min.js"></script>
 	</head>
-	<body id="body">
-		<p id="btn_record">Start recording</p>
+	<body id="popupBody">
+		<div id="headline" class="popupWrapper">
+			<img title="App Quality" src="../icons/app_quality_logo.svg"/>
+			<img title="Show recorded JSON" class="clickable" id="btn_json_actual" src="../icons/database.png"/>
+			<img title="Show JSON pattern" class="clickable" id="btn_json_pattern" src="../icons/question.png"/>
+		</div>
+
+	    <div id="confirm" class="hidden popupWrapper">
+	    	<p id="confirm_text" ></p>
+		    <button id="confirm_yes" class="clickable">YES</button>
+		    <button id="confirm_no" class="clickable">NO</button>
+		</div>
+	  
+		<p id="opt_headline">Select data to include:</p>
+
+	  	<div id="options" class="popupWrapper">
+	  		<input id="opt_click" type="checkbox" name="opt_click" value="click" checked="true">
+	  		<label for="opt_click">Clicks</label><hr>
+
+	  		<input id="opt_console" type="checkbox" name="opt_console" value="console" checked="true">
+	  		<label for="opt_console">User console logs</label><hr>
+
+	  		<input id="opt_error" type="checkbox" name="opt_error" value="error" checked="true">
+	  		<label for="opt_error">Errors</label><hr>
+
+	  		<input id="opt_errorget" type="checkbox" name="opt_errorget" value="errorget" checked="true">
+	  		<label for="opt_errorget">GET errors</label><hr>
+
+	  		<input id="opt_cachemiss" type="checkbox" name="opt_cachemiss" value="cachemiss" checked="true">
+	  		<label for="opt_cachemiss">Cache Miss errors</label><hr>
+
+	  		<input id="opt_extensions" type="checkbox" name="opt_extensions" value="extensions" checked="true">
+	  		<label for="opt_extensions">Extensions list</label><hr>
+
+	  		<input id="opt_cookies" type="checkbox" name="opt_cookies" value="cookie" checked="true">
+	  		<label for="opt_cookies">Cookies</label><hr>
+
+	  		<input id="opt_storage" type="checkbox" name="opt_storage" value="storage" checked="true">
+	  		<label for="opt_storage">Storage</label><hr>
+
+	  		<input id="opt_network" type="checkbox" name="opt_network" value="network" checked="true">
+	  		<label for="opt_network">Network</label>
+	  	</div>
+
+	  	<div style="width:100%; text-align: center;">
+  			<button id="btn_record">Start recording</button>
+  		</div>
+
+  		<div title="Report a bug of the extension" class="clickable" id="bug_div">
+  			<img src="../icons/bug.png"/>
+  		</div>
 
 		<script src="../scripts/popup.js"></script>
 	</body>
