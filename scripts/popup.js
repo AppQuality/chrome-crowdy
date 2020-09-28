@@ -4,7 +4,9 @@ var body = document.getElementById("popupBody");
 
 var btnRecord = document.getElementById("btn_record");
 
+var btnAppQuality = document.getElementById("btn_appquality");
 var btnJSONpattern = document.getElementById("btn_json_pattern");
+var btnJSONactual = document.getElementById("btn_json_actual");
 
 var confirmBox = document.getElementById("confirm");
 var confirmText = document.getElementById("confirm_text");
@@ -72,10 +74,18 @@ btnRecord.addEventListener("click", function(event) {
 	});
 });
 
+btnAppQuality.addEventListener("click", function(event) {
+	chrome.tabs.create({ url:"https://crowd.app-quality.com/" });
+});
+
 btnJSONpattern.addEventListener("click", function(event) {
 	chrome.tabs.create({ url:"../popup/jsonPattern.html" });
 });
 
+
+btnBug.addEventListener(("click"), function (event) {
+	chrome.tabs.create({ url:"https://github.com/AppQuality/chrome-crowdy/issues" });
+});
 
 confirmYes.addEventListener("click", function (event) {
 	chrome.storage.local.get("recording", function (result) {

@@ -89,11 +89,6 @@ div.hidden, div.hidden p, div.hidden button {
 	text-align: center;
 }
 
-#bug_div img, #bug_div p {
-	display:inline;
-	margin-left:10px;
-}
-
 #popupBody hr {
 	background-color: #f5f5f5;
 	border-color:transparent;
@@ -126,9 +121,6 @@ div.hidden, div.hidden p, div.hidden button {
 
 #bug_div img {
 	height:15px;
-}
-#bug_div p {
-	font-size:10px;
 }
 
 #options {
