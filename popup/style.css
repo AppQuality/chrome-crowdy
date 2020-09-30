@@ -164,6 +164,10 @@ div.hidden, div.hidden p, div.hidden button {
 
 /* JSON */
 
+details {
+	display:inline-block;
+}
+
 #jsonBody table {
 	border-collapse: collapse;
 	margin-right:1vw;
@@ -215,4 +219,10 @@ div.hidden, div.hidden p, div.hidden button {
 
 #arrayButtons {
 	display:block;
+}
+
+.delete_icon {
+	position:absolute;
+	right:1vw;
+	height:1.5em;
 }
