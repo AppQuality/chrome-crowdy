@@ -1,0 +1,19 @@
+{
+  "name": "chrome-crowdy",
+  "version": "1.0.0",
+  "author": "AppQuality Team",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AppQuality/chrome-crowdy.git"
+  },
+  "bugs": {
+    "url": "https://github.com/AppQuality/chrome-crowdy/issues"
+  },
+  "homepage": "https://github.com/AppQuality/chrome-crowdy#readme",
+  "devDependencies": {
+    "grunt": "^1.3.0",
+    "grunt-contrib-copy": "^1.0.0",
+    "grunt-contrib-watch": "^1.1.0"
+  }
+}
