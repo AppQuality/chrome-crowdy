@@ -161,9 +161,21 @@ chrome.storage.local.get(["recording","options"], function(result) {
 
 // DOWNLOAD
 
-function download(data, filename) {
+function download()
+{
+	/**
+	 * Format title
+	 */
+	var date = new Date();
+	var filename = date.getFullYear()
+		+ "_" + (date.getMonth() + 1)
+		+ "_" + date.getDate()
+		+ "_" + date.getHours()
+		+ date.getMinutes()
+		+ date.getSeconds()
+		+ "_recorded.json";
 	chrome.storage.local.get(null, function(data) {
-		saveAs(new Blob([getJSONStringToDownload(data)], {type: "text/plain;charset=utf-8"}), "recorded.json");
+		saveAs(new Blob([getJSONStringToDownload(data)], {type: "text/plain;charset=utf-8"}), filename);
 	});
 }
 
