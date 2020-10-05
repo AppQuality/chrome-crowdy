@@ -5,21 +5,28 @@
 		<link rel="stylesheet" type="text/css" href="style.css"/>
 	</head>
 	<body id="jsonBody">
-		<div id="header">
-			<h1>Actually recorded JSON</h1>
-			<button id="deleteAll">Delete selected items</button>
-			<table id="buttonsContainer">
-				<tr>
-					<td>Options:</td>
-					<td id="optionButtons"></td>
-				</tr>
-				<tr>
-					<td>Arrays:</td>
-					<td id="arrayButtons"></td>
-				</tr>
-			</table>
+
+		<h1 id="header">Actually recorded JSON</h1>
+		
+		<div id="body">
+			<iframe id="json" src="iframe.html"></iframe>
+			<div id="option_panel">
+				<h3 style="text-align: center;">Options</h3>
+				<br>
+				<button id="deleteAll">Delete selected items</button>
+				<br><br>
+				<div class="column">
+					<h4 style="margin-top:1vh; margin-left:2vw;">Types:</h4>
+					<div id="optionButtons"></div>
+				</div>
+				<br><br>
+				<div class="column">
+					<h4 style="margin-top:1vh; margin-left:2vw;">Arrays:</h4>
+					<div id="arrayButtons"></div>
+				</div>
+			</div>
 		</div>
-		<iframe id="json" src="iframe.html"></iframe>
+
 		<script src="../scripts/utility.js"></script>
 		<script src="jsonActual.js"></script>
 	</body>

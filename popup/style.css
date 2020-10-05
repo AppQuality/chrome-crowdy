@@ -1,16 +1,14 @@
 body {
 	font-family: Roboto, sans-serif, Helvetica, Arial, sans-serif;
 	font-size: 100%;
+	color:#17405e;
 }
 
 h1 {
 	display:inline-block;
-	font-family: "Segoe UI", Tahoma, sans-serif;
+	font-family: Roboto, sans-serif, Helvetica, Arial, sans-serif;
 	margin:0.5vh;
-}
-
-h3 {
-	font-family: "Lucida Console", Monaco, monospace;
+	color:#17405e;
 }
 
 table {
@@ -18,13 +16,20 @@ table {
 }
 
 button {
-	border: 1px solid;
-	border-radius: 100px;
-	background-color: lemonchiffon;
+	border-radius: 4px;
+	border-color:transparent;
+	background-color: red;
+	color:white;
+	font-weight: 700;
+	text-transform: uppercase;
+	box-shadow: 0 3px 6px 0 rgba(0,0,0,0.2);
 	cursor:pointer;
 }
 button:focus {
 	outline:0;
+}
+button:hover {
+	box-shadow: 0 6px 6px 0 rgba(30,30,30,0.2);
 }
 
 span {
@@ -63,8 +68,9 @@ div.hidden, div.hidden p, div.hidden button {
 }
 
 .selection_button {
-	display:inline-block;
+	display:block;
 	margin:1px;
+	float:left;
 }
 
 /* POPUP */ 
@@ -76,7 +82,7 @@ div.hidden, div.hidden p, div.hidden button {
 	transition: all 0.5s ease 0s;
 	display:block;
 
-	background-image: linear-gradient(to top, white , #e6ffff);
+	background-image: linear-gradient(to top, white , #ebf1f3);
 }
 
 #headline img {
@@ -93,16 +99,6 @@ div.hidden, div.hidden p, div.hidden button {
 	background-color: #f5f5f5;
 	border-color:transparent;
 	margin:2px;
-}
-
-#popupBody button {
-	border-radius: 4px;
-	border-color:transparent;
-	background-color: red;
-	color:white;
-	font-weight: 700;
-	text-transform: uppercase;
-	box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 3px 10px 0 rgba(0,0,0,0.19);
 }
 
 #btn_record {
@@ -186,21 +182,31 @@ details {
 	margin-left:4vw;
 	margin-right:4vw;
 	margin-bottom:4vh;
+
+	background-image: linear-gradient(to top, white , #ebf1f3);
+}
+
+#jsonBody button {
+	font-weight: inherit;
+	background-color:#44ad3f;
 }
 
 #header {
 	height:5vh;
-	margin-top:1vh;
+	margin-top:0vh;
 	margin-left:1vw;
 	margin-right:1vw;
-	margin-bottom:2vh;
+	margin-bottom:3vh;
 	width:90vw;
+	text-align: center;
+	color:#62aa4e;
 }
 
 #json {
 	font-family: "Lucida Console", Monaco, monospace;
-	width:90vw;
-	height:83vh;
+	height:82vh;
+	width:60vw;
+	display:inline;
 	/*
 	background-image: url("../icons/icon128.png");
 	background-position: center; 
@@ -209,20 +215,31 @@ details {
 }
 
 #buttonsContainer {
-	display:inline-block;
-	float:right;
-}
-
-#optionButtons {
-	display:block;
+	display:inline;
 }
 
 #arrayButtons {
-	display:block;
+	text-align: center;
+}
+#optionButtons {
+	text-align: center;
 }
 
 .delete_icon {
 	position:absolute;
 	right:1vw;
 	height:1.5em;
+}
+
+#option_panel {
+	display:inline-block;
+	vertical-align: top;
+	width:300px;
+	margin-left:3vw;
+}
+
+#jsonBody .column {
+	display:inline-block;
+	vertical-align: top;
+	padding:1px;
 }

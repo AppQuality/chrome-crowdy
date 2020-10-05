@@ -32,7 +32,7 @@ function getGeneralData (request, sender, sendResponse) {
 
 function attachDebugees() {
 	chrome.debugger.onEvent.addListener(getNetworkDebugInfo);
-
+	
 	chrome.tabs.getAllInWindow(null, function(tabs) {
 		for (let tab of tabs)
 			attachTab(tab);
@@ -55,10 +55,16 @@ function attachTab (tab) {
 function detachDebugees() {
 	chrome.debugger.onEvent.removeListener(getNetworkDebugInfo);
 
-	chrome.tabs.getAllInWindow(null, function(tabs) {
-		for (let tab of tabs)
-			if (isAttachable(tab.url))
-				chrome.debugger.detach({ tabId: tab.id });
+	chrome.debugger.getTargets(function (targets) {
+		for (let target of targets) {
+			if (target.attached) {
+				if (target.type == "page")
+					chrome.debugger.detach({ tabId:target.tabId });
+				if (target.type == "background_page")
+					chrome.debugger.detach({ extensionId:target.extensionId });
+			}
+			
+		}
 	});
 
 	chrome.tabs.onCreated.removeListener(attachTab);

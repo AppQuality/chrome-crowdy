@@ -46,10 +46,10 @@ function arrayListener(event) {
 function toggleValue(item) {
 	if (item.value == "none") {
 		item.value = "block";
-		item.style.backgroundColor = 'lemonchiffon';
+		item.style.backgroundColor = '#44ad3f';
 	} else {
 		item.value = "none";
-		item.style.backgroundColor = 'lightgrey';
+		item.style.backgroundColor = 'red';
 	}
 }
 
