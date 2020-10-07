@@ -16,7 +16,7 @@ function deleteAllChar(str,char) {
 
 function getPrePiece(obj,key,array) {
 	let head = "<span id='" + key + "' type=" + obj.type + " style='display:" + ((array != "extensions") ? (window.parent.document.getElementById(obj.type).value) : "block") +  ";'>";
-	let body = "<details> <summary>" + ((obj.type) ? " { type: " + obj.type + ", time: " + obj.time + ", domain: " + obj.domain + " }" : "details") + "</summary> " + JSON.stringify(obj,null,2) + " </details> <img class='delete_icon clickable' deleteIcon src='../icons/delete.png'>"
+	let body = "<details> <summary>" + ((obj.type) ? " { type: " + obj.type + ", time: " + obj.time + ", domain: " + obj.domain + " }" : "details") + "</summary> " + JSON.stringify(obj,null,2) + " </details> <img class='delete_icon clickable' deleteIcon src='../icons/delete.png'>";
 	let tail = "<hr></span>";
 	return  head + body + tail;
 	//return "<span type=" + obj.type + ((obj.domain != undefined) ? (" domain=" + deleteAllChar(obj.domain,".")) : " ") + " style='display:block;'>" + JSON.stringify(obj,null,2) + "<hr></span>";
@@ -34,11 +34,12 @@ function update(changes, namespace) {
 		arrays.forEach( pre => {
 			if (key.startsWith(pre.id)) {
 				if (changes[key].newValue)	// If the call is from the listener.
-					pre.innerHTML += getPrePiece(changes[key].newValue, key, pre.id);
+					pre.insertAdjacentHTML("beforeend", getPrePiece(changes[key].newValue, key, pre.id));
 				else if (namespace == null)	// If the call is from 'update(storage,null)'.
-					pre.innerHTML += getPrePiece(changes[key], key, pre.id);	
+					pre.insertAdjacentHTML("beforeend", getPrePiece(changes[key], key, pre.id));	
 			}
 		});
+		//window.getComputedStyle(document.getElementsByTagName("body")[0], null);
 	};
 }
 
