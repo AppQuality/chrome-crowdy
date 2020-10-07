@@ -5,7 +5,6 @@ var body = document.getElementById("popupBody");
 var btnRecord = document.getElementById("btn_record");
 
 var btnJSONpattern = document.getElementById("btn_json_pattern");
-var btnJSONactual = document.getElementById("btn_json_actual");
 
 var confirmBox = document.getElementById("confirm");
 var confirmText = document.getElementById("confirm_text");
@@ -77,9 +76,6 @@ btnJSONpattern.addEventListener("click", function(event) {
 	chrome.tabs.create({ url:"../popup/jsonPattern.html" });
 });
 
-btnJSONactual.addEventListener(("click"), function (event) {
-	chrome.tabs.create({ url:"../popup/jsonActual.html" });
-});
 
 confirmYes.addEventListener("click", function (event) {
 	chrome.storage.local.get("recording", function (result) {
