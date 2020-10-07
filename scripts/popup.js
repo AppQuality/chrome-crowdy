@@ -40,7 +40,7 @@ function changeToRecord() {
 // Graphic changes to the recording buttons (not recording phase)
 function initRecord() {
 	btnRecord.innerText = "Start recording";
-	body.style.backgroundImage = "linear-gradient(to top, white , #e6ffff)"
+	body.style.backgroundImage = "linear-gradient(to top, white , #ebf1f3)"
 }
 
 // LISTENERS
