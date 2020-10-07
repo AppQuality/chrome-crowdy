@@ -114,6 +114,7 @@ div.hidden, div.hidden p, div.hidden button {
 }
 
 #bug_div {
+	float: right;
 	text-align:right;
 	text-transform: uppercase;
 }
