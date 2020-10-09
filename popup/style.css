@@ -46,6 +46,11 @@ summary {
 	cursor:pointer;
 }
 
+button:hover
+{
+	transform: translateY(-1px);
+}
+
 div.hidden, div.hidden p, div.hidden button {
 	font-size:0 !important;	
 	max-height:0 !important;	
