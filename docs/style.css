@@ -1,0 +1,12 @@
+#file {
+	display:none;
+}
+
+#inputdiv {
+	background-color: grey;
+}
+
+#detailsdiv {
+	background-color: black;
+	color:white;
+}
