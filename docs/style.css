@@ -2,11 +2,31 @@
 	display:none;
 }
 
-#inputdiv {
-	background-color: grey;
+#chart {
+	display: none;
 }
 
-#detailsdiv {
-	background-color: black;
-	color:white;
+#header {
+	text-align: center;
+	position:absolute;
+	top:30%;
+	left:50%;
+	/*transform: translate(-50%,-50%);*/
+
+	font-size:3em;
+
+	animation: all 1s ease;
+}
+
+#btn_choose {
+	position:absolute;
+	top:60%;
+	left:50%;
+	transform: translate(-50%,-50%);
+
+	font-size: 3em;
+}
+
+.translateHeader {
+	transform: translate(-50%,-100%) !important;
 }

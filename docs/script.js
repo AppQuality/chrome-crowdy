@@ -6,11 +6,14 @@ var JSONdata = {};
 var JSONtimeobj = {};
 var chart;
 
+document.getElementById("file").addEventListener("input",readFile);
+
 function clickFileChooser() {
 	document.getElementById("file").click();
 }
 
 function readFile(click) {
+	document.getElementById("header").classList.toggle("translateHeader");
 	const reader = new FileReader();
 	reader.addEventListener('load', (event) => {
 		JSONdata = JSON.parse(event.target.result);

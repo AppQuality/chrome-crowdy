@@ -1,14 +1,13 @@
 <html>
 	<head>
 		<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-		<script src="script.js"></script>
 		<link rel="stylesheet" href="style.css"/>
 	</head>
 	<body>
 		<div id="inputdiv">
+			<h1 id="header">Analyze recording</h1>
 			<input type="file" id="file" accept=".json">
-			<button onclick="clickFileChooser()">Choose file</button><br>
-			<button onclick="readFile()">Confirm</button>
+			<button id="btn_choose" onclick="clickFileChooser()">Choose file</button><br>
 		</div>
 		<br>
 		
@@ -17,4 +16,6 @@
 
 		<div id="detailsdiv"></div>
 	</body>
+
+	<script src="script.js"></script>
 </html>
