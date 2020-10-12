@@ -97,8 +97,8 @@ var code = `{
 		}
 	}
 	crowdy.assignConsole();
-	window.addEventListener('error',crowdy.writeErrorForPage);
-
-	//console.log("bella");
-	//cacc
-}`
+	window.addEventListener('error',crowdy.writeErrorForPage);	
+}
+//console.log("bella");
+//questoèunerrore
+`

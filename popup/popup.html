@@ -8,7 +8,7 @@
 	</head>
 	<body id="popupBody">
 		<div id="headline" class="popupWrapper">
-			<img title="App Quality" src="../icons/app_quality_logo.svg"/>
+			<img title="App Quality" id="btn_appquality" class="clickable" src="../icons/app_quality_logo.svg"/>
 			<img title="Show recorded JSON" class="clickable" id="btn_json_actual" src="../icons/database.png"/>
 			<img title="Show JSON pattern" class="clickable" id="btn_json_pattern" src="../icons/question.png"/>
 		</div>
@@ -54,8 +54,8 @@
   			<button id="btn_record">Start recording</button>
   		</div>
 
-  		<div title="Report a bug of the extension" class="clickable" id="bug_div">
-  			<img src="../icons/bug.png"/>
+  		<div title="Report a bug of the extension" id="bug_div">
+  			<img class="clickable" id="btn_bug" src="../icons/bug.png"/>
   		</div>
 
 		<script src="../scripts/popup.js"></script>

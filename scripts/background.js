@@ -3,36 +3,20 @@
 // In the following, the 'array' parameter is a string that defines in which final array (events, starting_localStorage, starting_cookies) the object has to be stored.
 /*
 function getNetworkRequest(request) {
-	console.log(request);
+	tryWriteEvent(NETWORK,ARR_EVENTS, request, request.url);
 }*/
+
 
 function getNetworkDebugInfo(source, method, params) {
 	chrome.tabs.get(source.tabId, function (tab) {
+		//tryWriteEvent(NETWORK,ARR_EVENTS, {method:method, params:params}, tab.url);
 		tryWriteEvent(NETWORK,ARR_EVENTS, {method:method, params:params}, tab.url);
 	});
 }
 
-function getWebErrors(details) {
-	tryWriteEvent(ERRORGET,ARR_EVENTS,details, (details.initiator) ? details.initiator : details.url);
-}
-
-function getCookies (changeInfo) {
-	tryWriteEvent(COOKIE,ARR_EVENTS,changeInfo,changeInfo.cookie.domain);
-}
-
-function getGeneralData (request, sender, sendResponse) {
-	if (request.type == ARR_COOKIESTART) {
-		chrome.cookies.getAll({ url:request.data }, function (cookielist) {
-			tryWriteEvent(COOKIE, ARR_COOKIESTART, cookielist, request.data);	// This one needs some elaboration, so there is the need of the 'if-else' clause
-		});
-	}
-	else
-		tryWriteEvent(request.type, request.array, request.data, request.domain);	// The default data sent to chrome.runtime.onMessagge is a generic event
-}
-
 function attachDebugees() {
 	chrome.debugger.onEvent.addListener(getNetworkDebugInfo);
-
+	
 	chrome.tabs.getAllInWindow(null, function(tabs) {
 		for (let tab of tabs)
 			attachTab(tab);
@@ -55,14 +39,42 @@ function attachTab (tab) {
 function detachDebugees() {
 	chrome.debugger.onEvent.removeListener(getNetworkDebugInfo);
 
-	chrome.tabs.getAllInWindow(null, function(tabs) {
-		for (let tab of tabs)
-			if (isAttachable(tab.url))
-				chrome.debugger.detach({ tabId: tab.id });
+	chrome.debugger.getTargets(function (targets) {
+		for (let target of targets) {
+			if (target.attached) {
+				if (target.type == "page")
+					chrome.debugger.detach({ tabId:target.tabId });
+				if (target.type == "background_page")
+					chrome.debugger.detach({ extensionId:target.extensionId });
+			}
+			
+		}
 	});
 
 	chrome.tabs.onCreated.removeListener(attachTab);
 }
+
+
+
+function getWebErrors(details) {
+	tryWriteEvent(ERRORGET,ARR_EVENTS,details, (details.initiator) ? details.initiator : details.url);
+}
+
+function getCookies (changeInfo) {
+	tryWriteEvent(COOKIE,ARR_EVENTS,changeInfo,changeInfo.cookie.domain);
+}
+
+function getGeneralData (request, sender, sendResponse) {
+	if (request.type == ARR_COOKIESTART) {
+		chrome.cookies.getAll({ url:request.data }, function (cookielist) {
+			tryWriteEvent(COOKIE, ARR_COOKIESTART, cookielist, request.data);	// This one needs some elaboration, so there is the need of the 'if-else' clause
+		});
+	}
+	else
+		tryWriteEvent(request.type, request.array, request.data, request.domain);	// The default data sent to chrome.runtime.onMessagge is a generic event
+}
+
+
 
 function setListeners() { // Active background page
 	chrome.runtime.onMessage.addListener(getGeneralData);

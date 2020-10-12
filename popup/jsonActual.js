@@ -1,6 +1,7 @@
 "use-strict";
 
 var iframe = document.getElementById("json");
+var btn_delete = document.getElementById("deleteAll");
 
 // Options buttons are created dynamically
 OPTIONS.forEach( opt => {
@@ -8,6 +9,12 @@ OPTIONS.forEach( opt => {
 		createButton(opt,optionListener,"optionButtons");
 });
 ARRAYS.forEach( arr => { createButton(arr,arrayListener,"arrayButtons"); });
+
+btn_delete.addEventListener("click",sendDelete);
+
+function sendDelete() {
+	iframe.contentWindow.postMessage({ command:"delete" }, "*");
+}
 
 // ID of buttons is the option they refer to
 // Value of buttons is whether they're enabled or not (block=enabled, inline=disabled). This way, the value of buttons is equal to the span display attribute.
@@ -39,12 +46,14 @@ function arrayListener(event) {
 function toggleValue(item) {
 	if (item.value == "none") {
 		item.value = "block";
-		item.style.backgroundColor = 'lemonchiffon';
+		item.style.backgroundColor = '#44ad3f';
 	} else {
 		item.value = "none";
-		item.style.backgroundColor = 'lightgrey';
+		item.style.backgroundColor = 'red';
 	}
 }
+
+
 
 // THE FOLLOWING WAS A CUTE IDEA TO SELECT THE DATA FROM DOMAINS RECORDED, BUT THERE'S NO NEED TO IMPLEMENT IT NOW
 
