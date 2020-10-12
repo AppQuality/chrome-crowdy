@@ -26,7 +26,7 @@ function attachDebugees() {
 }
 
 function isAttachable(url) {
-	return (url && url.startsWith("http") && !url.startsWith("https://docs.google.com"));
+	return (url && url.startsWith("http") && !url.startsWith("https://docs.google.com") && url != "");
 }
 
 function attachTab (tab) {
@@ -53,8 +53,6 @@ function detachDebugees() {
 
 	chrome.tabs.onCreated.removeListener(attachTab);
 }
-
-
 
 function getWebErrors(details) {
 	tryWriteEvent(ERRORGET,ARR_EVENTS,details, (details.initiator) ? details.initiator : details.url);

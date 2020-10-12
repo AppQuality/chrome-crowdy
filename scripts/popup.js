@@ -74,17 +74,12 @@ btnRecord.addEventListener("click", function(event) {
 	});
 });
 
-btnAppQuality.addEventListener("click", function(event) {
-	chrome.tabs.create({ url:"https://crowd.app-quality.com/" });
-});
-
 btnJSONpattern.addEventListener("click", function(event) {
 	chrome.tabs.create({ url:"../popup/jsonPattern.html" });
 });
 
-
-btnBug.addEventListener(("click"), function (event) {
-	chrome.tabs.create({ url:"https://github.com/AppQuality/chrome-crowdy/issues" });
+btnJSONactual.addEventListener("click", function(event) {
+	chrome.tabs.create({ url:"../popup/jsonActual.html" });
 });
 
 confirmYes.addEventListener("click", function (event) {
