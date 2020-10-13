@@ -19,20 +19,22 @@ function attachDebugees() {
 	
 	chrome.tabs.getAllInWindow(null, function(tabs) {
 		for (let tab of tabs)
-			attachTab(tab);
+			attachTab(null,null,tab);
 	});
 
-	chrome.tabs.onCreated.addListener(attachTab);
+	chrome.tabs.onUpdated.addListener(attachTab);
 }
 
 function isAttachable(url) {
 	return (url && url.startsWith("http") && !url.startsWith("https://docs.google.com") && url != "");
 }
 
-function attachTab (tab) {
-	if (isAttachable(tab.url) || isAttachable(tab.pendingUrl)) {
-		chrome.debugger.attach({ tabId: tab.id },"1.3");
-		chrome.debugger.sendCommand({ tabId: tab.id }, "Network.enable");
+function attachTab (tabId, changeInfo, tab) {
+	if (changeInfo && changeInfo.url && changeInfo.url != "") {
+		if (isAttachable(tab.url) || isAttachable(tab.pendingUrl)) {
+			chrome.debugger.attach({ tabId: tab.id },"1.3");
+			chrome.debugger.sendCommand({ tabId: tab.id }, "Network.enable");
+		}
 	}
 }
 
