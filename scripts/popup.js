@@ -4,7 +4,9 @@ var body = document.getElementById("popupBody");
 
 var btnRecord = document.getElementById("btn_record");
 
+var btnAppQuality = document.getElementById("btn_appquality");
 var btnJSONpattern = document.getElementById("btn_json_pattern");
+var btnJSONactual = document.getElementById("btn_json_actual");
 
 var confirmBox = document.getElementById("confirm");
 var confirmText = document.getElementById("confirm_text");
@@ -38,7 +40,7 @@ function changeToRecord() {
 // Graphic changes to the recording buttons (not recording phase)
 function initRecord() {
 	btnRecord.innerText = "Start recording";
-	body.style.backgroundImage = "linear-gradient(to top, white , #e6ffff)"
+	body.style.backgroundImage = "linear-gradient(to top, white , #ebf1f3)"
 }
 
 // LISTENERS
@@ -76,6 +78,9 @@ btnJSONpattern.addEventListener("click", function(event) {
 	chrome.tabs.create({ url:"../popup/jsonPattern.html" });
 });
 
+btnJSONactual.addEventListener("click", function(event) {
+	chrome.tabs.create({ url:"../popup/jsonActual.html" });
+});
 
 confirmYes.addEventListener("click", function (event) {
 	chrome.storage.local.get("recording", function (result) {

@@ -3,13 +3,57 @@
 // In the following, the 'array' parameter is a string that defines in which final array (events, starting_localStorage, starting_cookies) the object has to be stored.
 /*
 function getNetworkRequest(request) {
-	console.log(request);
+	tryWriteEvent(NETWORK,ARR_EVENTS, request, request.url);
 }*/
+
 
 function getNetworkDebugInfo(source, method, params) {
 	chrome.tabs.get(source.tabId, function (tab) {
+		//tryWriteEvent(NETWORK,ARR_EVENTS, {method:method, params:params}, tab.url);
 		tryWriteEvent(NETWORK,ARR_EVENTS, {method:method, params:params}, tab.url);
 	});
+}
+
+function attachDebugees() {
+	chrome.debugger.onEvent.addListener(getNetworkDebugInfo);
+	
+	chrome.tabs.getAllInWindow(null, function(tabs) {
+		for (let tab of tabs)
+			attachTab(null,null,tab);
+	});
+
+	chrome.tabs.onUpdated.addListener(attachTab);
+}
+
+function isAttachable(url) {
+	return (url && url.startsWith("http") && !url.startsWith("https://docs.google.com") && url != "");
+}
+
+function attachTab (tabId, changeInfo, tab) {
+	if (changeInfo && changeInfo.url && changeInfo.url != "") {
+		if (isAttachable(tab.url) || isAttachable(tab.pendingUrl)) {
+			chrome.debugger.attach({ tabId: tab.id },"1.3");
+			chrome.debugger.sendCommand({ tabId: tab.id }, "Network.enable");
+		}
+	}
+}
+
+function detachDebugees() {
+	chrome.debugger.onEvent.removeListener(getNetworkDebugInfo);
+
+	chrome.debugger.getTargets(function (targets) {
+		for (let target of targets) {
+			if (target.attached) {
+				if (target.type == "page")
+					chrome.debugger.detach({ tabId:target.tabId });
+				if (target.type == "background_page")
+					chrome.debugger.detach({ extensionId:target.extensionId });
+			}
+			
+		}
+	});
+
+	chrome.tabs.onCreated.removeListener(attachTab);
 }
 
 function getWebErrors(details) {
@@ -30,39 +74,7 @@ function getGeneralData (request, sender, sendResponse) {
 		tryWriteEvent(request.type, request.array, request.data, request.domain);	// The default data sent to chrome.runtime.onMessagge is a generic event
 }
 
-function attachDebugees() {
-	chrome.debugger.onEvent.addListener(getNetworkDebugInfo);
 
-	chrome.tabs.getAllInWindow(null, function(tabs) {
-		for (let tab of tabs)
-			attachTab(tab);
-	});
-
-	chrome.tabs.onCreated.addListener(attachTab);
-}
-
-function isAttachable(url) {
-	return (url && url.startsWith("http") && !url.startsWith("https://docs.google.com"));
-}
-
-function attachTab (tab) {
-	if (isAttachable(tab.url) || isAttachable(tab.pendingUrl)) {
-		chrome.debugger.attach({ tabId: tab.id },"1.3");
-		chrome.debugger.sendCommand({ tabId: tab.id }, "Network.enable");
-	}
-}
-
-function detachDebugees() {
-	chrome.debugger.onEvent.removeListener(getNetworkDebugInfo);
-
-	chrome.tabs.getAllInWindow(null, function(tabs) {
-		for (let tab of tabs)
-			if (isAttachable(tab.url))
-				chrome.debugger.detach({ tabId: tab.id });
-	});
-
-	chrome.tabs.onCreated.removeListener(attachTab);
-}
 
 function setListeners() { // Active background page
 	chrome.runtime.onMessage.addListener(getGeneralData);

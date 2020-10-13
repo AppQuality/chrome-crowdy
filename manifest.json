@@ -22,6 +22,7 @@
       	"downloads",
 		"webRequest",
 		"debugger",
+		"*://*/*",
 		"<all_urls>"
     ],
 
@@ -45,7 +46,6 @@
 		"js": ["scripts/content.js"]
 	}],
 	
-
 	"background": {
 		"scripts": ["scripts/utility.js", "scripts/background.js"]
 	}
