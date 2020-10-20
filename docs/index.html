@@ -4,17 +4,43 @@
 		<link rel="stylesheet" href="style.css"/>
 	</head>
 	<body>
-		<div id="inputdiv">
+		<div id="header_div">
+			<img onclick="changeView(this)" on="chart_page" src="../icons/graph.png"/>
+			<img onclick="changeView(this)" on="table_page" src="../icons/grid.png"/>
 			<h1 id="header">Analyze recording</h1>
-			<input type="file" id="file" accept=".json">
-			<button id="btn_choose" onclick="clickFileChooser()">Choose file</button><br>
+			<button id="btn_choose_mini" class="hidden" onclick="clickFileChooser()">Choose file</button>
 		</div>
+
+		<button id="btn_choose" onclick="clickFileChooser()">Choose file</button><br>
 		<br>
 		
-		<div id="chart"></div>
-		<br>
+		<div id="chart_page" class="one_page hidden">
+			<h2>Graph</h2>
+			<div id="chart"></div>	
+			<br>
+			<h2 style="display:inline;">Details</h2>
+			<img title="Open selected" id="show_details_icon" src="../icons/zoom.png" onclick="openAll()" />
+			<br>
+			<pre id="detailsdiv"></pre>
+			<br>
+		</div>
 
-		<div id="detailsdiv"></div>
+		<div id="table_page" class="one_page hidden">
+			<h2>Extension installed</h2>
+			<span id="ext_list"></span>
+
+			<h2>Cookie table</h2>
+			<div id="cookie_table"></div>
+
+			<h2>Storage table</h2>
+			<div id="storage_table"></div>
+		</div>
+
+		<div id="footer" class="footer_start">
+			<img src="../icons/app_quality_logo.svg" />
+		</div>
+
+		<input type="file" id="file" accept=".json">
 	</body>
 
 	<script src="script.js"></script>
