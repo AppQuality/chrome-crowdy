@@ -8,11 +8,9 @@ h1, h2 {
 }
 
 button {
-	border-radius: 4px;
 	border-color:transparent;
 	background-color: red;
 	color:white;
-	font-weight: 700;
 	text-transform: uppercase;
 	box-shadow: 0 3px 6px 0 rgba(0,0,0,0.2);
 	cursor:pointer;
@@ -23,16 +21,24 @@ summary {
 	cursor:pointer;
 }
 
-th, td {
-  border: 1px solid black;
+p {
+	display:inline;
+}
+hr {
+	margin-top:3px;
+	margin-bottom: 3px; 
 }
 
-td {
+tr,th,td {
 	text-align: center;
 }
 
-p {
-	display:inline;
+#ext_list li {
+	display:inline-block;
+}
+
+.popover {
+    white-space: pre-wrap;    
 }
 
 #file {
@@ -53,23 +59,23 @@ p {
 	height:100px;
 	background-color: #ebf1f3;
 	width:100%;
+	border-bottom: 1px solid black;
 	z-index: 1;
 }
 #header_div img {
 	position:relative;
 	top:30px;
-	left:50px;
-	margin-left:20px;
-	height:40px;
+	left:70px;
+	height:50px;
 	cursor:pointer;
 }
 
 #btn_choose_mini {
 	position:absolute;
-	top:60%;
+	top:50%;
 	transform: translate(-50%,-50%);
 	right:10%;
-	width:100px;
+	border-radius: 4px;
 }
 
 #btn_choose {
@@ -77,6 +83,7 @@ p {
 	top:50%;
 	left:50%;
 	transform: translate(-50%,-50%);
+	border-radius: 10px;
 
 	font-size: 3em;
 }
@@ -112,9 +119,7 @@ p {
 	height:100px;
 }
 .footer_page {
-	position:relative;
 	height:100px;
-	top:100px;
 	z-index:-2;
 }
 #footer img {
@@ -131,11 +136,15 @@ p {
 }
 
 .one_page {
-	position:relative;
-	top:80px;
-	left:30px;
+	margin-top:80px;
+	margin-left:5%;
+	width:90%;
 }
 
 .clickable {
 	cursor:pointer;
+}
+
+.mini_table {
+	margin-left:50px;
 }

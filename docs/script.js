@@ -82,122 +82,48 @@ function draw() {
 
 function createTables() {
 	// EXTENSIONS
-	let ext = document.getElementById("ext_list");
-	ext.innerHTML = "";
-	for (let item of JSONdata.extensions)
-		ext.insertAdjacentHTML("beforeend", item.name + " (" + item.version + ")<br>");
 
-	let timeList = [];
-	for (let item of JSONdata.events) {
-		if (item.type == "cookie" && timeList[timeList.length - 1] != item.time)
-			timeList.push(item.time);
-	}
+	let ext = document.getElementById("ext_list");
+	ext.innerHTML = "<ul class='list-group list-group-horizontal'>";
+	for (let item of JSONdata.extensions)
+		ext.insertAdjacentHTML("beforeend", "<li class='list-group-item border border-1'>" + item.name + " (" + item.version + ")</li>");
+	ext.innerHTML + "</ul>";
 
 	// COOKIES 
-
 
 	let cookie_table = document.getElementById("cookie_table");
 	cookie_table.innerHTML = "";
 
 	let cookieObject = {};
+
 	for (let item of JSONdata.events) {
 		if (item.type == "cookie") {
-			if (!Object.keys(cookieObject).includes(item.data.cookie.domain + "|" + item.data.cookie.name)) {
-				cookieObject[(item.data.cookie.domain + "|" + item.data.cookie.name)] = [{
+			if (!Object.keys(cookieObject).includes(item.data.cookie.domain)) {
+				cookieObject[item.data.cookie.domain] = {};
+				(cookieObject[item.data.cookie.domain])[item.data.cookie.name] = [{
 					time: item.time,
 					value: item.data.cookie.value,
 					cause: item.data.cause
 				}];
 			} else {
-				cookieObject[(item.data.cookie.domain + "|" + item.data.cookie.name)].push({
-					time: item.time,
-					value: item.data.cookie.value,
-					cause: item.data.cause
-				});
+				if (!Object.keys(cookieObject[item.data.cookie.domain]).includes(item.data.cookie.name)) {
+					(cookieObject[item.data.cookie.domain])[item.data.cookie.name] = [{
+						time: item.time,
+						value: item.data.cookie.value,
+						cause: item.data.cause
+					}];
+				} else {
+					(cookieObject[item.data.cookie.domain])[item.data.cookie.name].push({
+						time: item.time,
+						value: item.data.cookie.value,
+						cause: item.data.cause
+					});
+				}
 			}
 		}
 	}
 
-	// COOKIE MAIN TABLE
-	let table = document.createElement("table");
-	cookie_table.append(table);
-	let tr1 = document.createElement("tr");
-	let th1 = document.createElement("th");
-	th1.innerHTML = "Domain";
-	table.append(tr1);
-	tr1.append(th1);
-
-	let tr, th, td;
-	let domain = "";
-	for (let key in cookieObject) {
-		if (key.split("|")[0] != domain) {
-			tr = document.createElement("tr");
-			table.append(tr);
-
-			th = document.createElement("th");
-			th.innerHTML = key.split("|")[0];
-			th.domain = key.split("|")[0];
-			th.addEventListener("click",showDomain);
-			th.classList.add("clickable");
-			tr.append(th);
-		}
-
-		td = document.createElement("td");
-		td.innerHTML = key.split("|")[1];
-		td.key = key;
-		td.classList.add("clickable");
-		td.addEventListener("click",showCookie);
-		tr.append(td);
-
-		domain = key.split("|")[0];
-	}
-
-	let hr = document.createElement("hr");
-	cookie_table.append(hr);
-
-	// COOKIE TABLES
-	for (let key in cookieObject) {
-		let table = document.createElement("table");
-		table.append(document.createElement("br"));
-		cookie_table.append(table);
-		table.classList.toggle("hidden");
-		table.setAttribute("key",key);
-		let tr_time = document.createElement("tr");
-		table.append(tr_time);
-		let tr_value = document.createElement("tr");
-		table.append(tr_value);
-
-		let th = document.createElement("th");
-		th.innerHTML = " ";
-		tr_time.append(th);
-		td = document.createElement("td");
-		td.innerHTML = "Starting value";
-		tr_time.append(td);
-		th = document.createElement("th");
-		th.innerHTML = "<p style='color:grey;'>" + key.split("|")[0] + " </p><p> " + key.split("|")[1] + "</p>";
-		tr_value.append(th);
-		td = document.createElement("td");
-		td.innerHTML = "To be inserted";
-		tr_value.append(td);
-
-		let td_value;
-		let td_time;
-		let oldtime = "0";
-		for (let value of cookieObject[key]) {
-			if (oldtime != value.time) {
-				td_value = document.createElement("td");
-				tr_value.append(td_value);
-
-				td_time = document.createElement("td");
-				td_time.innerHTML = value.time.split(" ")[1];
-				tr_time.append(td_time);
-			}
-			
-			td_value.innerHTML += "<pre>" + value.cause + "\n" + value.value + "\n</pre>";
-
-			oldtime = value.time;
-		}
-	}
+	createGenericTables(cookie_table,cookieObject,"cookie");
 
 	// STORAGE 
 
@@ -205,101 +131,153 @@ function createTables() {
 	storage_table.innerHTML = "";
 
 	let storageObject = {};
+
 	for (let item of JSONdata.events) {
 		if (item.type == "storage") {
-			if (!Object.keys(storageObject).includes(item.domain + "|" + item.data.key)) {
-				storageObject[(item.domain + "|" + item.data.key)] = [{
+			if (!Object.keys(storageObject).includes(item.domain)) {
+				storageObject[item.domain] = {};
+				(storageObject[item.domain])[item.data.key] = [{
 					time: item.time,
 					value: item.data.newValue
 				}];
 			} else {
-				storageObject[(item.domain + "|" + item.data.key)].push({
-					time: item.time,
-					value: item.data.newValue
-				});
+				if (!Object.keys(storageObject[item.domain]).includes(item.key)) {
+					(storageObject[item.domain])[item.data.key] = [{
+						time: item.time,
+						value: item.data.newValue
+					}];
+				} else {
+					(storageObject[item.domain])[item.data.key].push({
+						time: item.time,
+						value: item.data.newValue
+					});
+				}
 			}
 		}
 	}
 
-	// STORAGE MAIN TABLE
-	table = document.createElement("table");
-	storage_table.append(table);
-	tr1 = document.createElement("tr");
-	th1 = document.createElement("th");
+	createGenericTables(storage_table,storageObject,"storage");
+
+	$('[data-toggle="popover"]').popover();
+}
+
+function createGenericTables(container, obj,type) {
+	let tableClasses = ["table","table-bordered","table-hover","table-sm","table-responsive","table-striped", "border", "border-0"];
+
+	// MAIN TABLE
+	let table = document.createElement("table");
+	addTableClasses(table,tableClasses);
+	container.append(table);
+	let thead = document.createElement("thead");
+	table.append(thead);
+	let tr1 = document.createElement("tr");
+	let th1 = document.createElement("th");
+	tr1.classList.add("thead-light");
 	th1.innerHTML = "Domain";
-	table.append(tr1);
+	thead.append(tr1);
 	tr1.append(th1);
 
-	domain = "";
-	for (let key in storageObject) {
-		if (key.split("|")[0] != domain) {
-			tr = document.createElement("tr");
-			table.append(tr);
+	let tr, th, td;
+	let tbody = document.createElement("tbody");
+	table.append(tbody);
 
+	for (let key in obj) {
+		tr = document.createElement("tr");
+		tbody.append(tr);
+		th = document.createElement("td");
+		th.innerHTML = key;
+		th.domain = key;
+		th.addEventListener("click",showDomain);
+		th.classList.add("clickable");
+		tr.append(th);
+
+		for (item in obj[key]) {
+			td = document.createElement("td");
+			td.innerHTML = item;
+			td.key = key + "|" + item;
+			td.classList.add("clickable");
+			td.addEventListener("click",showCookie);
+			tr.append(td);
+		}
+	}
+
+	// TABLES
+	for (let key in obj) {
+		for (let item in obj[key]) {
+			let table = document.createElement("table");
+			addTableClasses(table,tableClasses.concat(["hidden","mini_table"]));
+			container.append(table);
+			table.setAttribute("key",key + "|" + item);
+
+			thead = document.createElement("thead");
+			table.append(thead);
+			let tr_time = document.createElement("tr");
+			thead.append(tr_time);
+
+			tbody = document.createElement("tbody");
+			table.append(tbody);
+			let tr_value = document.createElement("tr");
+			tbody.append(tr_value);
+
+			let th = document.createElement("th");
+			th.innerHTML = " ";
+			tr_time.append(th);
+			td = document.createElement("td");
+			td.innerHTML = "Starting value";
+			tr_time.append(td);
 			th = document.createElement("th");
-			th.innerHTML = key.split("|")[0];
-			th.domain = key.split("|")[0];
-			th.addEventListener("click",showDomain);
+			th.innerHTML = "<p style='color:grey;'>" + key + " </p><br><p> " + item + "</p>";
+			th.addEventListener("click", function(event) { event.target.closest("table").classList.add("hidden"); } );
 			th.classList.add("clickable");
-			tr.append(th);
-		}
+			tr_value.append(th);
+			td = document.createElement("td");
+			td.innerHTML = "To be inserted";
+			tr_value.append(td);
 
-		td = document.createElement("td");
-		td.innerHTML = key.split("|")[1];
-		td.key = key;
-		td.classList.add("clickable");
-		td.addEventListener("click",showCookie);
-		tr.append(td);
+			let td_value;
+			let td_time;
+			let oldtime = "0";
+			for (let value of (obj[key])[item]) {
+				if (oldtime != value.time) {
+					if (td_value != null)
+						td_value.setAttribute("data-content", td_value.getAttribute("data-content") + "</ul>");
 
-		domain = key.split("|")[0];
-	}
+					td_value = document.createElement("td");
+					td_value.classList.add("clickable");
+					td_value.setAttribute("data-toggle","popover");
+					td_value.setAttribute("title",key + "\n" + item);
+					td_value.setAttribute("data-html","true");
+					tr_value.append(td_value);
 
-	hr = document.createElement("hr");
-	storage_table.append(hr);
+					td_time = document.createElement("td");
+					td_time.innerHTML = value.time.split(" ")[1];
+					tr_time.append(td_time);
+				}
+				
+				if (type == "cookie")
+					addPopupElement(td_value,value.cause + "\n" + value.value);
+				else if (type == "storage")
+					addPopupElement(td_value,value.value);
 
-	// STORAGE TABLES
-	for (let key in storageObject) {
-		let table = document.createElement("table");
-		table.append(document.createElement("br"));
-		storage_table.append(table);
-		table.classList.toggle("hidden");
-		table.setAttribute("key",key);
-		let tr_time = document.createElement("tr");
-		table.append(tr_time);
-		let tr_value = document.createElement("tr");
-		table.append(tr_value);
-
-		let th = document.createElement("th");
-		th.innerHTML = " ";
-		tr_time.append(th);
-		td = document.createElement("td");
-		td.innerHTML = "Starting value";
-		tr_time.append(td);
-		th = document.createElement("th");
-		th.innerHTML = "<p style='color:grey;'>" + key.split("|")[0] + " </p><p> " + key.split("|")[1] + "</p>";
-		tr_value.append(th);
-		td = document.createElement("td");
-		td.innerHTML = "To be inserted";
-		tr_value.append(td);
-
-		let td_value;
-		let td_time;
-		let oldtime = "0";
-		for (let value of storageObject[key]) {
-			if (oldtime != value.time) {
-				td_value = document.createElement("td");
-				tr_value.append(td_value);
-
-				td_time = document.createElement("td");
-				td_time.innerHTML = value.time.split(" ")[1];
-				tr_time.append(td_time);
+				oldtime = value.time;
 			}
-			
-			td_value.innerHTML += "<pre>" + value.value + "\n</pre>";
-
-			oldtime = value.time;
 		}
 	}
+}
+
+function addPopupElement(td,text) {
+	let prev = td.getAttribute("data-content");
+	if (prev == null)	prev = "<ul class='list-group'>";
+	td.setAttribute("data-content", prev + "<li class='list-group-item'>" + text + "</li>\n");
+	if (td.innerHTML == "")
+		td.innerHTML = "<pre>" + text + "</pre>";
+	else if (!td.innerHTML.endsWith("..."))
+		td.innerHTML += "...";
+}
+
+function addTableClasses(table,listOfClasses) {
+	for (let str of listOfClasses)
+		table.classList.add(str);
 }
 
 function showCookie(event) {
@@ -346,17 +324,19 @@ function columnClick () {
 
 	let div = document.getElementById('detailsdiv');
 	div.innerHTML = '';
+	div.insertAdjacentHTML("beforeend", "<ul class='list-group'>");
 	Object.values(JSONtimeobj)[selectedItem.row].forEach( (item) => {
 		if (TYPES.indexOf(item.type) == selectedItem.column - 1) {
 			div.insertAdjacentHTML("beforeend", getPrePiece(item));
 		}
 	});
+	div.insertAdjacentHTML("beforeend", "</ul>");
 }
 
 function getPrePiece(obj,key) {
-	let head = "<span type=" + obj.type + " style='display:block" +  ";'>";
+	let head = "<li type=" + obj.type + " class='list-group-item';'>";
 	let body = "<details><summary>" + ((obj.type) ? " { type: " + obj.type + ", time: " + obj.time + ", domain: " + obj.domain + " }" : "details") + "</summary>" + JSON.stringify(obj,null,2) + "</details>";
-	let tail = "<hr></span>";
+	let tail = "</li>";
 	return  head + body + tail;
 }
 
