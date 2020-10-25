@@ -186,10 +186,15 @@ function download()
 function getJSONStringToDownload(data) {
 	KEYSTOIGNORE.forEach( key => { delete data[key] } );
 	let finalobj = {};
-	ARRAYS.forEach(arr => { finalobj[arr] = []; } );
 
-	finalobj.extensions = data.extensions;
-	delete data.extensions;
+
+	finalobj[ARR_EVENTS] = [];
+	finalobj[ARR_LOCALSTART] = data[ARR_LOCALSTART];
+	finalobj[ARR_COOKIESTART] = data[ARR_COOKIESTART];
+	finalobj[ARR_EXTENSIONS] = data[ARR_EXTENSIONS];
+	delete data[ARR_EXTENSIONS];
+	delete data[ARR_COOKIESTART];
+	delete data[ARR_LOCALSTART];
 	
 	for (let obj in data)
 		finalobj[obj.split("|")[0]].push(data[obj]);
