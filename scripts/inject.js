@@ -7,7 +7,7 @@ function injectJS () {
 	// Cookies can only be accessed from the background page
 
 	let cookieurl = window.location.href.split(":")[0] + "://" + document.domain;
-	chrome.runtime.sendMessage({ "type":ARR_COOKIESTART , "data":cookieurl });
+	chrome.runtime.sendMessage({ "type":ARR_COOKIESTART , "data":cookieurl, "path":window.location.href });
 
 
 	// SEND INITIAL LOCAL STORAGE TO BACKGROUND PAGE
@@ -15,7 +15,7 @@ function injectJS () {
 	let local = {};
 	for (let i = 0; i < localStorage.length; i++)
 		local[localStorage.key(i)] = localStorage.getItem(localStorage.key(i));
-	chrome.runtime.sendMessage({ "type":STORAGE, "array":ARR_LOCALSTART, "data":local, "domain":document.domain });
+	chrome.runtime.sendMessage({ "type":STORAGE, "array":ARR_LOCALSTART, "data":local, "domain":document.domain, "path":window.location.href });
 
 
 	// LISTEN TO INJECTED INTERRUPTS
@@ -26,7 +26,7 @@ function injectJS () {
 			return;
 
 		if (event.data.ext == "chrome-crowdy")	// Check if the messagge comes from the extension injected script
-			chrome.runtime.sendMessage({ "type":event.data.type, "array":ARR_EVENTS, "data":event.data.data, "domain":window.location.href });
+			chrome.runtime.sendMessage({ "type":event.data.type, "array":ARR_EVENTS, "data":event.data.data, "domain":window.location.href, "path":window.location.href });
 	}, false);
 
 

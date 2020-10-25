@@ -17,13 +17,13 @@ function contentJS() {
 			return;
 
 		let data = { 
-			"url": window.location.href,
 			"id_obj": event.target.id,
 			"class_obj": event.target.className,
+			"tag": event.target.tagName,
 			"position_x": event.clientX,
 			"position_y": event.clientY
 		};
 
-		chrome.runtime.sendMessage({ array:ARR_EVENTS, 'type':CLICK, 'data':data, 'domain':window.location.href });
+		chrome.runtime.sendMessage({ array:ARR_EVENTS, 'type':CLICK, 'data':data, 'domain':window.location.href, 'path':window.location.href });
 	}, true);
 }

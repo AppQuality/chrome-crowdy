@@ -15,11 +15,21 @@ function deleteAllChar(str,char) {
 }
 
 function getPrePiece(obj,key,array) {
-	let head = "<span id='" + key + "' type=" + obj.type + " style='display:" + ((array != "extensions") ? (window.parent.document.getElementById(obj.type).value) : "block") +  ";'>";
-	let body = "<details> <summary>" + ((obj.type) ? " { type: " + obj.type + ", time: " + obj.time + ", domain: " + obj.domain + " }" : "details") + "</summary> " + JSON.stringify(obj,null,2) + " </details> <img class='delete_icon clickable' deleteIcon src='../icons/delete.png'>";
+	let head = "<span id='" + key + "' ";
+	if (obj.type)
+		head += "type=" + obj.type + " style='display:" + window.parent.document.getElementById(obj.type).value + ";'>";
+	else
+		head += "style='display:block;'>";
+	let body = "<details><summary>";
+	if (key.startsWith("events"))
+		body += "type: " + obj.type + ", time: " + obj.time + ", domain: " + obj.domain;
+	if (key == "extensions")
+		body += "details";
+	if (array == "starting_localStorage" || array == "starting_cookies")
+		body += key;
+	body += "</summary>" + JSON.stringify(obj,null,2) + "</details><img class='delete_icon clickable' deleteIcon src='../icons/delete.png'>";
 	let tail = "<hr></span>";
 	return  head + body + tail;
-	//return "<span type=" + obj.type + ((obj.domain != undefined) ? (" domain=" + deleteAllChar(obj.domain,".")) : " ") + " style='display:block;'>" + JSON.stringify(obj,null,2) + "<hr></span>";
 }
 
 function update(changes, namespace) {
@@ -33,13 +43,18 @@ function update(changes, namespace) {
 	for (let key in changes)  {
 		arrays.forEach( pre => {
 			if (key.startsWith(pre.id)) {
-				if (changes[key].newValue)	// If the call is from the listener.
+				if (key == "starting_cookies" || key == "starting_localStorage") {
+					if (changes[key].newValue)	
+						pre.insertAdjacentHTML("beforeend", Object.keys(changes[key].newValue).filter(x => !Object.keys(changes[key].oldValue).includes(x)).reduce(((acc,x) => acc + getPrePiece(changes[key].newValue[x], x, pre.id) ),[]));
+					else if (namespace == null && !objectIsEmpty(changes[key]))
+						pre.insertAdjacentHTML("beforeend", Object.keys(changes[key]).reduce(((acc,x) => acc + getPrePiece(changes[key][x], x, pre.id) ),[]));
+				}
+				else if (changes[key].newValue)	// If the call is from the listener.
 					pre.insertAdjacentHTML("beforeend", getPrePiece(changes[key].newValue, key, pre.id));
-				else if (namespace == null)	// If the call is from 'update(storage,null)'.
-					pre.insertAdjacentHTML("beforeend", getPrePiece(changes[key], key, pre.id));	
+				else if (namespace == null && !objectIsEmpty(changes[key]))	// If the call is from 'update(storage,null)'.
+					pre.insertAdjacentHTML("beforeend", getPrePiece(changes[key], key, pre.id));
 			}
 		});
-		//window.getComputedStyle(document.getElementsByTagName("body")[0], null);
 	};
 }
 
@@ -59,7 +74,14 @@ function removeItem(event) {
 
 function deleteAll() {
 	for (let item of toDelete) {
-		chrome.storage.local.remove(item.id);
+		let pre = item.closest("pre").id;
+		if (pre == "starting_localStorage" || pre == "starting_cookies") {
+			chrome.storage.local.get([pre], function (storage) {
+				delete storage[pre][item.id];
+				chrome.storage.local.set(storage);
+			});
+		} else 
+			chrome.storage.local.remove(item.id);
 		item.remove();
 	}
 }
@@ -74,3 +96,7 @@ chrome.storage.onChanged.addListener(update);	// Update the shown data in real t
 chrome.storage.local.get(null, function(storage) {	// Show the recorded data when the page opens.
 	update(storage,null);
 });
+
+function objectIsEmpty (obj) {
+	return (Object.keys(obj).length === 0 && obj.constructor === Object);
+}

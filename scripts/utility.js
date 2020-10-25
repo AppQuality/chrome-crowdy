@@ -19,11 +19,11 @@ const ARR_LOCALSTART = "starting_localStorage";
 const ARR_EXTENSIONS = "extensions";
 const ARRAYS = [ARR_EVENTS, ARR_LOCALSTART, ARR_COOKIESTART, ARR_EXTENSIONS];
 
-const KEYSTOIGNORE = ["recording","options","num","domains_cookie","domains_storage"];
+const KEYSTOIGNORE = ["recording","options","num"];
 
 function storageInit() {
 	chrome.storage.local.clear();
-	chrome.storage.local.set({ "recording":"none", "num":0, "domains_cookie":[], "domains_storage":[] });
+	chrome.storage.local.set({ "recording":"none", "num":0, "starting_localStorage":{}, "starting_cookies":{} });
 	
 	let obj = {};
 	obj["disabled"] = false;
@@ -46,4 +46,8 @@ function tryInject (func) {
 					func();
 			});
 	});
+}
+
+function objectIsEmpty (obj) {
+	return (Object.keys(obj).length === 0 && obj.constructor === Object);
 }

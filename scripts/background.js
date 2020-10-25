@@ -67,11 +67,11 @@ function getCookies (changeInfo) {
 function getGeneralData (request, sender, sendResponse) {
 	if (request.type == ARR_COOKIESTART) {
 		chrome.cookies.getAll({ url:request.data }, function (cookielist) {
-			tryWriteEvent(COOKIE, ARR_COOKIESTART, cookielist, request.data);	// This one needs some elaboration, so there is the need of the 'if-else' clause
+			tryWriteEvent(COOKIE, ARR_COOKIESTART, cookielist, request.data, request.path);	// This one needs some elaboration, so there is the need of the 'if-else' clause
 		});
 	}
 	else
-		tryWriteEvent(request.type, request.array, request.data, request.domain);	// The default data sent to chrome.runtime.onMessagge is a generic event
+		tryWriteEvent(request.type, request.array, request.data, request.domain, request.path);	// The default data sent to chrome.runtime.onMessagge is a generic event
 }
 
 
@@ -108,8 +108,8 @@ chrome.storage.onChanged.addListener(function (changeInfo) {	// Listen for the r
 var updates = []; 		// Array of data
 var running = false; 	// Mutex 
 
-function tryWriteEvent(type, array, data, domain) {
-	updates.push({ 'type':type, 'array':array, 'data': data, 'domain':domain });
+function tryWriteEvent(type, array, data, domain, path) {
+	updates.push({ 'type':type, 'array':array, 'data': data, 'domain':domain, 'path':path });
 	writeEvent();
 }
 
@@ -118,7 +118,7 @@ function writeEvent() {
         return;
 
     running = true;
-	chrome.storage.local.get(["num","domains_cookie","domains_storage","options"], function(storage) {
+	chrome.storage.local.get(["num",ARR_COOKIESTART,ARR_LOCALSTART,"options"], function(storage) {
 		let num = storage.num;
 		let obj = {};
 		let tmpUpdates = updates.slice();	// Temporary array to work on. If the updates array gets modified while in the function, the behaviour might not be what we want
@@ -131,31 +131,27 @@ function writeEvent() {
 			if (!storage.options[item.type])
 				continue;
 
-			let domain;
-			if (item.domain) {
-				domain = trimDomain(item.domain);
-				let storageDomain = (item.array == ARR_COOKIESTART) ? "domains_cookie" : "domains_storage";
-				
-				// If the item is of type 'initial array', and an item from the same domain has already been stored, don't store it
-				if (item.array != ARR_EVENTS) {
-					if (storage[storageDomain].includes(domain) || (obj[storageDomain] && obj[storageDomain].includes(domain))) {
-						continue;
-					} else {
-						obj[storageDomain] = storage[storageDomain];
-						obj[storageDomain].push(domain);
-					}
+			let domain = trimDomain(item.domain);;
+			if (item.domain && (item.array == ARR_COOKIESTART || item.array == ARR_LOCALSTART)) {
+				if (!(storage[item.array])[domain]) {
+					if (obj[item.array] == undefined)
+						obj[item.array] = storage[item.array];
+					(obj[item.array])[domain] = item.data;
 				}
 			}
 			
 			// Write an object in the root. I don't write in arrays because they have to be entirely read and written all times in the chrome.storage.
-			num = num + 1;
-			let key = item.array + "|" + ('000000000000' + num.toString()).slice(-12); 	
+			if (item.array == ARR_EVENTS) {
+				num = num + 1;
+				let key = item.array + "|" + ('000000000000' + num.toString()).slice(-12); 	
 
-			obj[key] = {};
-			obj[key].time = printDatetime(new Date());
-			obj[key].type = item.type;
-			obj[key].data = item.data;
-			obj[key].domain = domain;
+				obj[key] = {};
+				obj[key].time = printDatetime(new Date());
+				obj[key].type = item.type;
+				obj[key].data = item.data;
+				obj[key].domain = domain;
+				obj[key].path = item.path;
+			}
 		}
 
 		obj["num"] = num;
@@ -172,6 +168,8 @@ function preExit() {	// When 'writeEvent' is finished, if some other data has be
 }
 
 function trimDomain(domain) {	// Give domains the same pattern to be able to compare them
+	if (!domain)
+		return undefined;
 	let res;
 	if (domain.startsWith("http://"))
 		res = domain.slice(7);
