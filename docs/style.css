@@ -148,3 +148,10 @@ tr,th,td {
 .mini_table {
 	margin-left:50px;
 }
+
+.storage_td {
+	max-width:15em;
+}
+.storage_td pre {
+	overflow-x: hidden;
+}

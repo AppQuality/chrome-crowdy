@@ -122,6 +122,26 @@ function createTables() {
 			}
 		}
 	}
+	for (let domkey in JSONdata.starting_cookies) {
+		for (let storkey in JSONdata.starting_cookies[domkey]) {
+			let dom = JSONdata.starting_cookies[domkey][storkey].domain;
+			let name = JSONdata.starting_cookies[domkey][storkey].name;
+			if (!Object.keys(cookieObject).includes(dom)) {
+				cookieObject[dom] = {};
+				cookieObject[dom][name] = [{
+					time: " Starting_value",
+					value: JSONdata.starting_cookies[domkey][storkey].value,
+					cause: JSONdata.starting_cookies[domkey][storkey].name
+				}];
+			} else if (!Object.keys(cookieObject[dom]).includes(name)) {
+				cookieObject[dom][name] = [{
+					time: " Starting_value",
+					value: JSONdata.starting_cookies[domkey][storkey].value,
+					cause: JSONdata.starting_cookies[domkey][storkey].name
+				}];
+			}
+		}
+	}
 
 	createGenericTables(cookie_table,cookieObject,"cookie");
 
@@ -141,7 +161,7 @@ function createTables() {
 					value: item.data.newValue
 				}];
 			} else {
-				if (!Object.keys(storageObject[item.domain]).includes(item.key)) {
+				if (!Object.keys(storageObject[item.domain]).includes(item.data.key)) {
 					(storageObject[item.domain])[item.data.key] = [{
 						time: item.time,
 						value: item.data.newValue
@@ -152,6 +172,22 @@ function createTables() {
 						value: item.data.newValue
 					});
 				}
+			}
+		}
+	}
+	for (let domkey in JSONdata.starting_localStorage) {
+		for (let storkey in JSONdata.starting_localStorage[domkey]) {
+			if (!Object.keys(storageObject).includes(domkey)) {
+				storageObject[domkey] = {};
+				storageObject[domkey][storkey] = [{
+					time: " Starting_value",
+					value: JSONdata.starting_localStorage[domkey][storkey]
+				}];
+			} else if (!Object.keys(storageObject[domkey]).includes(storkey)) {
+				storageObject[domkey][storkey] = [{
+					time: " Starting_value",
+					value: JSONdata.starting_localStorage[domkey][storkey]
+				}];
 			}
 		}
 	}
@@ -222,28 +258,23 @@ function createGenericTables(container, obj,type) {
 			let th = document.createElement("th");
 			th.innerHTML = " ";
 			tr_time.append(th);
-			td = document.createElement("td");
-			td.innerHTML = "Starting value";
-			tr_time.append(td);
 			th = document.createElement("th");
 			th.innerHTML = "<p style='color:grey;'>" + key + " </p><br><p> " + item + "</p>";
 			th.addEventListener("click", function(event) { event.target.closest("table").classList.add("hidden"); } );
 			th.classList.add("clickable");
 			tr_value.append(th);
-			td = document.createElement("td");
-			td.innerHTML = "To be inserted";
-			tr_value.append(td);
 
 			let td_value;
 			let td_time;
 			let oldtime = "0";
-			for (let value of (obj[key])[item]) {
+			for (let value of obj[key][item]) {
 				if (oldtime != value.time) {
 					if (td_value != null)
 						td_value.setAttribute("data-content", td_value.getAttribute("data-content") + "</ul>");
 
 					td_value = document.createElement("td");
 					td_value.classList.add("clickable");
+					td_value.classList.add("storage_td");
 					td_value.setAttribute("data-toggle","popover");
 					td_value.setAttribute("title",key + "\n" + item);
 					td_value.setAttribute("data-html","true");
