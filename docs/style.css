@@ -150,8 +150,9 @@ tr,th,td {
 }
 
 .storage_td {
-	max-width:15em;
-}
-.storage_td pre {
+	max-width:10em;
 	overflow-x: hidden;
+	white-space: pre;
+	font-family: "Courier New", Courier, monospace;
+	font-size:0.9em;
 }

@@ -96,6 +96,26 @@ function createTables() {
 
 	let cookieObject = {};
 
+	for (let domkey in JSONdata.starting_cookies) {
+		for (let storkey in JSONdata.starting_cookies[domkey]) {
+			let dom = JSONdata.starting_cookies[domkey][storkey].domain;
+			let name = JSONdata.starting_cookies[domkey][storkey].name;
+			if (!Object.keys(cookieObject).includes(dom)) {
+				cookieObject[dom] = {};
+				cookieObject[dom][name] = [{
+					time: " Starting_value",
+					value: JSONdata.starting_cookies[domkey][storkey].value,
+					cause: ""
+				}];
+			} else if (!Object.keys(cookieObject[dom]).includes(name)) {
+				cookieObject[dom][name] = [{
+					time: " Starting_value",
+					value: JSONdata.starting_cookies[domkey][storkey].value,
+					cause: ""
+				}];
+			}
+		}
+	}
 	for (let item of JSONdata.events) {
 		if (item.type == "cookie") {
 			if (!Object.keys(cookieObject).includes(item.data.cookie.domain)) {
@@ -122,26 +142,6 @@ function createTables() {
 			}
 		}
 	}
-	for (let domkey in JSONdata.starting_cookies) {
-		for (let storkey in JSONdata.starting_cookies[domkey]) {
-			let dom = JSONdata.starting_cookies[domkey][storkey].domain;
-			let name = JSONdata.starting_cookies[domkey][storkey].name;
-			if (!Object.keys(cookieObject).includes(dom)) {
-				cookieObject[dom] = {};
-				cookieObject[dom][name] = [{
-					time: " Starting_value",
-					value: JSONdata.starting_cookies[domkey][storkey].value,
-					cause: JSONdata.starting_cookies[domkey][storkey].name
-				}];
-			} else if (!Object.keys(cookieObject[dom]).includes(name)) {
-				cookieObject[dom][name] = [{
-					time: " Starting_value",
-					value: JSONdata.starting_cookies[domkey][storkey].value,
-					cause: JSONdata.starting_cookies[domkey][storkey].name
-				}];
-			}
-		}
-	}
 
 	createGenericTables(cookie_table,cookieObject,"cookie");
 
@@ -152,6 +152,22 @@ function createTables() {
 
 	let storageObject = {};
 
+	for (let domkey in JSONdata.starting_localStorage) {
+		for (let storkey in JSONdata.starting_localStorage[domkey]) {
+			if (!Object.keys(storageObject).includes(domkey)) {
+				storageObject[domkey] = {};
+				storageObject[domkey][storkey] = [{
+					time: " Starting_value",
+					value: JSONdata.starting_localStorage[domkey][storkey]
+				}];
+			} else if (!Object.keys(storageObject[domkey]).includes(storkey)) {
+				storageObject[domkey][storkey] = [{
+					time: " Starting_value",
+					value: JSONdata.starting_localStorage[domkey][storkey]
+				}];
+			}
+		}
+	}
 	for (let item of JSONdata.events) {
 		if (item.type == "storage") {
 			if (!Object.keys(storageObject).includes(item.domain)) {
@@ -175,26 +191,10 @@ function createTables() {
 			}
 		}
 	}
-	for (let domkey in JSONdata.starting_localStorage) {
-		for (let storkey in JSONdata.starting_localStorage[domkey]) {
-			if (!Object.keys(storageObject).includes(domkey)) {
-				storageObject[domkey] = {};
-				storageObject[domkey][storkey] = [{
-					time: " Starting_value",
-					value: JSONdata.starting_localStorage[domkey][storkey]
-				}];
-			} else if (!Object.keys(storageObject[domkey]).includes(storkey)) {
-				storageObject[domkey][storkey] = [{
-					time: " Starting_value",
-					value: JSONdata.starting_localStorage[domkey][storkey]
-				}];
-			}
-		}
-	}
 
 	createGenericTables(storage_table,storageObject,"storage");
 
-	$('[data-toggle="popover"]').popover();
+	$('[data-toggle="popover"]').popover({animation: true, html:true});
 }
 
 function createGenericTables(container, obj,type) {
@@ -260,7 +260,7 @@ function createGenericTables(container, obj,type) {
 			tr_time.append(th);
 			th = document.createElement("th");
 			th.innerHTML = "<p style='color:grey;'>" + key + " </p><br><p> " + item + "</p>";
-			th.addEventListener("click", function(event) { event.target.closest("table").classList.add("hidden"); } );
+			th.addEventListener("click", hideSelf);
 			th.classList.add("clickable");
 			tr_value.append(th);
 
@@ -277,7 +277,6 @@ function createGenericTables(container, obj,type) {
 					td_value.classList.add("storage_td");
 					td_value.setAttribute("data-toggle","popover");
 					td_value.setAttribute("title",key + "\n" + item);
-					td_value.setAttribute("data-html","true");
 					tr_value.append(td_value);
 
 					td_time = document.createElement("td");
@@ -301,14 +300,38 @@ function addPopupElement(td,text) {
 	if (prev == null)	prev = "<ul class='list-group'>";
 	td.setAttribute("data-content", prev + "<li class='list-group-item'>" + text + "</li>\n");
 	if (td.innerHTML == "")
-		td.innerHTML = "<pre>" + text + "</pre>";
+		td.innerHTML = text;
 	else if (!td.innerHTML.endsWith("..."))
-		td.innerHTML += "...";
+		td.innerHTML += "\n...";
 }
 
 function addTableClasses(table,listOfClasses) {
 	for (let str of listOfClasses)
 		table.classList.add(str);
+}
+
+function hideTable(how,elem) {
+	if (how == "toggle") {
+		if (elem.classList.contains("hidden"))
+			how = "remove";
+		else
+			how = "add";	
+	}
+	if (how == "add") {
+		elem.classList.add("hidden");
+		$("table[key='" + elem.getAttribute("key") + "'] td").popover('hide');
+	}
+	if (how == "remove") {
+		elem.classList.remove("hidden");
+	}
+	let tds = $("table:not(.hidden) td[aria-describedby]");
+	tds.popover('hide');
+	tds.popover('show');
+}
+
+function hideSelf(event) {
+	hideTable("add",event.target.closest("table"));
+	//event.target.closest("table").classList.add("hidden");
 }
 
 function showCookie(event) {
@@ -318,8 +341,10 @@ function showCookie(event) {
 	else
 		doc = document.querySelectorAll("#storage_table table[key='" + event.target.key + "']");
 
-	doc[0].classList.toggle("hidden");
+	//doc[0].classList.toggle("hidden");
+	hideTable("toggle",doc[0]);
 }
+
 function showDomain(event) {
 	let doc;
 	if (document.getElementById("cookie_table").contains(event.target))
@@ -333,9 +358,11 @@ function showDomain(event) {
 	}
 	for (let tab of doc) {
 		if (hide)
-			tab.classList.add("hidden");
+			//tab.classList.add("hidden");
+			hideTable("add",tab);
 		else
-			tab.classList.remove("hidden");
+			//tab.classList.remove("hidden");
+			hideTable("remove",tab);
 	}
 }
 
