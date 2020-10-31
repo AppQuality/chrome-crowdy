@@ -37,9 +37,14 @@ You have the possibility to see all the data that have been recorded pressing th
 - filter the data, hiding some recordings;
 - delete some data: press on the bin icon on the right of each ojbect, then click "Delete selected".
 
-
 If you encounter a bug of the extension, please report it using the bug icon on the bottom-right.
+
 
 This extension works on the following browsers:
 - Chrome;
 - Edge.
+
+# Post-usage
+
+If you want to read the .json file in a way that doesn't imply reading all the objects, you can use our dashboard. To see how to use it, select the branch "docs".
+
