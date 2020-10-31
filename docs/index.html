@@ -1,15 +1,15 @@
 <html>
 	<head>
-		<script src="../libs/jquery-3.5.1.min.js"></script>
+		<script src="libs/jquery-3.5.1.min.js"></script>
 		<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.bundle.min.js" integrity="sha384-3ziFidFTgxJXHMDttyPJKDuTlmxJlwbSkojudK/CkRqKDOmeSbN6KLrGdrBQnT2n" crossorigin="anonymous"></script>
-		<link rel="stylesheet" href="../libs/bootstrap/css/bootstrap.min.css"/>
+		<link rel="stylesheet" href="libs/bootstrap/css/bootstrap.min.css"/>
 		<link rel="stylesheet" href="style.css"/>
 	</head>
 	<body>
 		<div id="header_div">
-			<img title="Show events" class="img-thumbnail" onclick="changeView(this)" on="chart_page" src="../icons/graph.png"/>
-			<img title="Show cookies, extensions, storage" class="img-thumbnail" onclick="changeView(this)" on="table_page" src="../icons/grid.png"/>
+			<img title="Show events" class="img-thumbnail" onclick="changeView(this)" on="chart_page" src="icons/graph.png"/>
+			<img title="Show cookies, extensions, storage" class="img-thumbnail" onclick="changeView(this)" on="table_page" src="icons/grid.png"/>
 			<h1 id="header">Analyze recording</h1>
 			<button id="btn_choose_mini" class="hidden" onclick="clickFileChooser()">Choose file</button>
 		</div>
@@ -22,7 +22,7 @@
 			<div id="chart"></div>	
 			<br>
 			<h2 style="display:inline;">Details</h2>
-			<img title="Open selected" id="show_details_icon" src="../icons/zoom.png" onclick="openAll()" />
+			<img title="Open selected" id="show_details_icon" src="icons/zoom.png" onclick="openAll()" />
 			<br><br>
 			<pre id="detailsdiv"></pre>
 			<br>
@@ -40,7 +40,7 @@
 		</div>
 
 		<div id="footer" class="footer_start">
-			<img src="../icons/app_quality_logo.svg" />
+			<img src="icons/app_quality_logo.svg" />
 		</div>
 
 		<input type="file" id="file" accept=".json">
