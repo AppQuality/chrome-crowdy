@@ -243,3 +243,15 @@ details {
 	vertical-align: top;
 	padding:1px;
 }
+
+#icon_ref {
+	font-size:0.7em;
+	color:grey;
+	float:right;
+}
+#icon_ref a:link {
+	color:grey;
+}
+#icon_ref a:visited {
+	color:grey;
+}
