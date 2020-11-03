@@ -430,8 +430,7 @@ function readFile(click) {
 		document.getElementById('table_page').classList.add("hidden");
 		document.getElementById("btn_choose_mini").classList.remove("hidden");
 		document.getElementById("btn_choose").classList.add("hidden");
-		document.getElementById("footer").classList.remove("footer_start");
-		document.getElementById("footer").classList.add("footer_page");
+		document.getElementById("footer").classList.add("hidden");
 	});
 	reader.readAsText(document.getElementById("file").files[0]);
 }

@@ -118,14 +118,11 @@ tr,th,td {
 	left:50%;
 	height:100px;
 }
-.footer_page {
-	height:100px;
-	z-index:-2;
-}
+
 #footer img {
 	height:60px;
-	margin-bottom: 20px;
-	margin-top: 20px;
+	margin-bottom: 10px;
+	margin-top: 10px;
 }
 
 #show_details_icon {
@@ -155,4 +152,23 @@ tr,th,td {
 	white-space: pre;
 	font-family: "Courier New", Courier, monospace;
 	font-size:0.9em;
+}
+
+#icon_ref {
+	position:absolute;
+	left:100%;
+	top:100%;
+	transform: translate(-100%,-100%);
+	color:grey;
+	float:left;
+	font-size:0.8em;
+	white-space: nowrap;
+
+}
+
+#app_logo {
+	position:absolute;
+	top:50%;
+	left:50%;
+	transform: translate(-50%,-50%);
 }
